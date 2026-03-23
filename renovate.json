@@ -1,21 +1,49 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "extends": [
+    "github>sm-moshi/infra//.github/renovate/base.json",
     "config:best-practices",
     ":preserveSemverRanges"
   ],
   "enabledManagers": [
-    "github-actions"
+    "cargo",
+    "github-actions",
+    "mise",
+    "woodpecker"
   ],
+  "lockFileMaintenance": {
+    "enabled": true,
+    "groupName": "lock file maintenance",
+    "schedule": ["before 6am on monday"]
+  },
   "packageRules": [
     {
-      "matchManagers": ["github-actions"],
-      "addLabels": ["ci"]
+      "description": "Auto-merge patch updates",
+      "matchUpdateTypes": ["patch"],
+      "automerge": true
     },
     {
-      "description": "Auto-merge GitHub Actions updates",
-      "matchManagers": ["github-actions"],
+      "description": "Auto-merge minor updates for dev-dependencies",
+      "matchDepTypes": ["dev-dependencies"],
+      "matchUpdateTypes": ["minor", "patch"],
       "automerge": true
+    },
+    {
+      "description": "Group all GitHub Actions updates",
+      "matchManagers": ["github-actions"],
+      "groupName": "GitHub Actions",
+      "addLabels": ["ci"],
+      "automerge": true
+    },
+    {
+      "description": "Group mise tool updates",
+      "matchManagers": ["mise"],
+      "groupName": "mise tools",
+      "automerge": true
+    },
+    {
+      "matchManagers": ["cargo"],
+      "addLabels": ["rust"]
     }
   ]
 }

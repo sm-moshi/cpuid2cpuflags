@@ -1,0 +1,4 @@
+* text=auto eol=lf
+
+# Test fixtures — preserve line endings exactly
+tests/fixtures/**/*.txt text eol=lf
