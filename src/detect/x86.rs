@@ -1,8 +1,8 @@
 //! x86 / x86\_64 CPU flag detection via CPUID.
 
 use crate::flags::{Arch, FlagSet};
-use crate::tables::x86::FLAGS;
 use crate::tables::CheckSource;
+use crate::tables::x86::FLAGS;
 
 /// CPUID register values collected from the CPU.
 #[derive(Debug, Default)]
@@ -73,10 +73,10 @@ pub(crate) fn check_flags(regs: &CpuidRegs) -> FlagSet {
 /// These intrinsics are safe in recent Rust — no `unsafe` needed.
 #[cfg(any(target_arch = "x86_64", target_arch = "x86"))]
 fn read_cpuid() -> Result<CpuidRegs, crate::error::Error> {
-    #[cfg(target_arch = "x86_64")]
-    use core::arch::x86_64::{__cpuid, __cpuid_count, __get_cpuid_max};
     #[cfg(target_arch = "x86")]
     use core::arch::x86::{__cpuid, __cpuid_count, __get_cpuid_max};
+    #[cfg(target_arch = "x86_64")]
+    use core::arch::x86_64::{__cpuid, __cpuid_count, __get_cpuid_max};
 
     let mut regs = CpuidRegs::default();
 
@@ -165,19 +165,19 @@ pub(crate) fn parse_mock_x86(lines: &[&str]) -> Result<CpuidRegs, crate::error::
                         regs.intel_ecx = ecx;
                         regs.intel_edx = edx;
                         regs.got_intel = true;
-                    }
+                    },
                     0x8000_0001 => {
                         regs.amd_ecx = ecx;
                         regs.amd_edx = edx;
                         regs.got_amd = true;
-                    }
+                    },
                     0xC000_0001 => {
                         regs.via_edx = edx;
                         regs.got_via = true;
-                    }
-                    _ => {}
+                    },
+                    _ => {},
                 }
-            }
+            },
             "sub" => {
                 if parts.len() < 7 {
                     continue;
@@ -202,16 +202,16 @@ pub(crate) fn parse_mock_x86(lines: &[&str]) -> Result<CpuidRegs, crate::error::
                             regs.intel_sub0_ecx = ecx;
                             regs.intel_sub0_edx = edx;
                             regs.got_intel_sub0 = true;
-                        }
+                        },
                         1 => {
                             regs.intel_sub1_eax = eax;
                             regs.got_intel_sub1 = true;
-                        }
-                        _ => {}
+                        },
+                        _ => {},
                     }
                 }
-            }
-            _ => {}
+            },
+            _ => {},
         }
     }
 

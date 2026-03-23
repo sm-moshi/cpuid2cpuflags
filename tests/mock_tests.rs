@@ -15,11 +15,7 @@ fn assert_fixture(path: &str) {
     });
 
     let detected_str = detected.flags().join(" ");
-    assert_eq!(
-        expected, detected_str,
-        "output mismatch for fixture {}",
-        path.display()
-    );
+    assert_eq!(expected, detected_str, "output mismatch for fixture {}", path.display());
 }
 
 // --- x86 fixtures ---
