@@ -11,7 +11,7 @@ steps:
   - name: release-plz
     image: harbor.m0sh1.cc/apps/rust-ci:debian-latest
     environment:
-      CARGO_HOME: /woodpecker/cache/cpuid2cpuflags/cargo
+      RUSTUP_HOME: /home/ci/.rustup
       GITHUB_TOKEN:
         from_secret: github_token
     commands:
@@ -24,5 +24,3 @@ steps:
       - git config --global --add safe.directory "$CI_WORKSPACE"
       - git remote set-url origin "https://$GITHUB_TOKEN@github.com/sm-moshi/cpuid2cpuflags.git"
       - ./bin/release-plz release --git-token "$GITHUB_TOKEN"
-    volumes:
-      - woodpecker-pipeline-cache:/woodpecker/cache
