@@ -23,4 +23,4 @@ steps:
       - git config --global user.name "Woodpecker CI"
       - git config --global --add safe.directory "$CI_WORKSPACE"
       - git remote set-url origin "https://$GITHUB_TOKEN@github.com/sm-moshi/cpuid2cpuflags.git"
-      - ./bin/release-plz release --git-token "$GITHUB_TOKEN"
+      - ./bin/release-plz release --git-token "$GITHUB_TOKEN" || echo "release-plz: no new release needed (tag may already exist)"
