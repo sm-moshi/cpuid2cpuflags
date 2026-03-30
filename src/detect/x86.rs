@@ -27,10 +27,14 @@ pub(crate) struct CpuidRegs {
 
 /// Detect x86 CPU flags using the CPUID instruction.
 ///
-/// Only available on x86/x86_64 targets.
+/// Only available on `x86`/`x86_64` targets.
+///
+/// # Errors
+///
+/// Returns an error if CPUID data cannot be read.
 #[cfg(any(target_arch = "x86_64", target_arch = "x86"))]
 pub fn detect() -> Result<FlagSet, crate::error::Error> {
-    let regs = read_cpuid()?;
+    let regs = read_cpuid();
     Ok(check_flags(&regs))
 }
 
@@ -72,7 +76,7 @@ pub(crate) fn check_flags(regs: &CpuidRegs) -> FlagSet {
 ///
 /// These intrinsics are safe in recent Rust — no `unsafe` needed.
 #[cfg(any(target_arch = "x86_64", target_arch = "x86"))]
-fn read_cpuid() -> Result<CpuidRegs, crate::error::Error> {
+fn read_cpuid() -> CpuidRegs {
     #[cfg(target_arch = "x86")]
     use core::arch::x86::{__cpuid, __cpuid_count, __get_cpuid_max};
     #[cfg(target_arch = "x86_64")]
@@ -122,7 +126,7 @@ fn read_cpuid() -> Result<CpuidRegs, crate::error::Error> {
         regs.got_via = true;
     }
 
-    Ok(regs)
+    regs
 }
 
 /// Parse CPUID register data from a mock test data file.
