@@ -38,16 +38,13 @@ steps:
       - woodpecker-pipeline-cache:/woodpecker/cache
 
   - name: test-musl
-    image: harbor.m0sh1.cc/apps/rust-ci:alpine-latest
+    image: harbor.m0sh1.cc/apps/rust-ci:debian-latest
     environment:
       CARGO_HOME: /woodpecker/cache/cpuid2cpuflags/cargo
       RUSTUP_HOME: /home/ci/.rustup
-    backend_options:
-      kubernetes:
-        securityContext:
-          runAsUser: 0
     commands:
-      - cargo test --all-features
+      - rustup target add x86_64-unknown-linux-musl
+      - cargo test --all-features --target x86_64-unknown-linux-musl
     volumes:
       - woodpecker-pipeline-cache:/woodpecker/cache
 
