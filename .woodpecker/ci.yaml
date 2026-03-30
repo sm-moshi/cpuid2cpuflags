@@ -42,6 +42,10 @@ steps:
     environment:
       CARGO_HOME: /woodpecker/cache/cpuid2cpuflags/cargo
       RUSTUP_HOME: /home/ci/.rustup
+    backend_options:
+      kubernetes:
+        securityContext:
+          runAsUser: 0
     commands:
       - cargo test --all-features
     volumes:
