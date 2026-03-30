@@ -40,7 +40,9 @@ steps:
       CARGO_HOME: /woodpecker/cache/cpuid2cpuflags/cargo
       RUSTUP_HOME: /home/ci/.rustup
     commands:
+      - apt-get update -qq && apt-get install -y -qq gcc-aarch64-linux-gnu libc6-dev-arm64-cross >/dev/null
       - rustup target add aarch64-unknown-linux-gnu
+      - export CARGO_TARGET_AARCH64_UNKNOWN_LINUX_GNU_LINKER=aarch64-linux-gnu-gcc
       - cargo build --release --locked --target aarch64-unknown-linux-gnu
       - cp target/aarch64-unknown-linux-gnu/release/cpuid2cpuflags dist/cpuid2cpuflags-linux-aarch64-gnu
       - tar czvf "dist/cpuid2cpuflags-$CI_COMMIT_TAG-linux-aarch64-gnu.tar.gz" -C dist cpuid2cpuflags-linux-aarch64-gnu
